@@ -1,0 +1,141 @@
+@import '@fontsource-variable/fraunces/opsz.css';
+@import '@fontsource-variable/manrope/index.css';
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Manrope Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Fraunces Variable', ui-serif, Georgia, serif;
+
+  --color-bottle-50: #eef5f1;
+  --color-bottle-100: #d5e7dd;
+  --color-bottle-200: #a9cdb9;
+  --color-bottle-300: #74ab8e;
+  --color-bottle-500: #2a7353;
+  --color-bottle-600: #1d5c41;
+  --color-bottle-700: #164c36;
+  --color-bottle-800: #12432f;
+  --color-bottle-900: #0d3324;
+  --color-bottle-950: #08231a;
+
+  --color-gold-100: #f7ecc8;
+  --color-gold-200: #efdc9c;
+  --color-gold-300: #e3c766;
+  --color-gold-400: #d6b443;
+  --color-gold-500: #c9a227;
+  --color-gold-600: #a7841a;
+  --color-gold-700: #7f6414;
+
+  --color-cream-50: #fdfbf5;
+  --color-cream-100: #f8f3e6;
+  --color-cream-200: #efe6d0;
+  --color-cream-300: #e2d5b6;
+
+  --color-ink-400: #8a8d8f;
+  --color-ink-500: #6b6f72;
+  --color-ink-600: #4d5154;
+  --color-ink-700: #383b3e;
+  --color-ink-800: #2b2e30;
+  --color-ink-900: #1f2123;
+
+  --color-wine-50: #fbf0ee;
+  --color-wine-100: #f4d9d4;
+  --color-wine-600: #9b3b2f;
+  --color-wine-700: #7e2f25;
+
+  --shadow-card: 0 1px 0 rgb(255 255 255 / 0.6) inset, 0 1px 2px rgb(31 33 35 / 0.06), 0 4px 14px -6px rgb(13 51 36 / 0.18);
+  --shadow-lift: 0 10px 30px -12px rgb(13 51 36 / 0.35);
+
+  --animate-deal: deal 380ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-fade: fade 220ms ease-out both;
+  @keyframes deal {
+    from {
+      opacity: 0;
+      transform: translateY(10px) rotate(-1.5deg) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-cream-100 font-sans text-ink-800 antialiased;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgb(18 67 47 / 0.05) 1px, transparent 0);
+    background-size: 22px 22px;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display text-bottle-900;
+    font-optical-sizing: auto;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-gold-500;
+  }
+  dialog::backdrop {
+    background: rgb(8 35 26 / 0.55);
+    backdrop-filter: blur(2px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 1ms !important;
+      transition-duration: 1ms !important;
+    }
+  }
+}
+
+@layer components {
+  .felt {
+    background:
+      radial-gradient(120% 90% at 20% 0%, rgb(42 115 83 / 0.55), transparent 60%),
+      radial-gradient(90% 80% at 100% 100%, rgb(8 35 26 / 0.9), transparent 60%),
+      var(--color-bottle-800);
+  }
+  .gold-rule {
+    background: linear-gradient(90deg, transparent, var(--color-gold-500), transparent);
+    height: 1px;
+  }
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Impresión: solo el contenido marcado como imprimible. */
+@media print {
+  @page {
+    margin: 12mm;
+  }
+  body {
+    background: white !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-area {
+    overflow: visible !important;
+  }
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
