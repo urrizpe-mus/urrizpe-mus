@@ -63,6 +63,19 @@ export function useInstallPrompt() {
  * una versión antigua de la app no puede sobrescribir datos.
  * Cuando hay una versión nueva se avisa y el usuario decide cuándo recargar.
  */
+const OPENED_AT = Date.now();
+
+/** Aplica la versión nueva y recarga. Si el aviso del service worker no llega, recarga igualmente. */
+async function applyUpdate(updateServiceWorker: (reload?: boolean) => Promise<void>) {
+  const fallback = setTimeout(() => window.location.reload(), 1500);
+  try {
+    await updateServiceWorker(true);
+  } catch {
+    clearTimeout(fallback);
+    window.location.reload();
+  }
+}
+
 export function PwaUpdater() {
   const m = useT();
   const {
@@ -74,12 +87,18 @@ export function PwaUpdater() {
       if (registration) setInterval(() => registration.update().catch(() => undefined), 60 * 60 * 1000);
     },
   });
+  // Si la versión nueva se detecta nada más abrir la app, se aplica sola:
+  // todavía no se está usando y los datos están guardados en IndexedDB.
+  useEffect(() => {
+    if (needRefresh && Date.now() - OPENED_AT < 10_000) void applyUpdate(updateServiceWorker);
+  }, [needRefresh, updateServiceWorker]);
+
   if (!needRefresh) return null;
   return (
     <div className="no-print fixed inset-x-3 top-3 z-[70] mx-auto flex max-w-md animate-deal items-center gap-3 rounded-2xl bg-bottle-900 px-4 py-3 text-cream-50 shadow-[var(--shadow-lift)] sm:top-auto sm:bottom-6">
       <RefreshCw size={18} className="shrink-0 text-gold-300" />
       <p className="flex-1 text-sm font-semibold">{m.settings.update}</p>
-      <Button size="sm" variant="gold" onClick={() => updateServiceWorker(true)}>
+      <Button size="sm" variant="gold" onClick={() => void applyUpdate(updateServiceWorker)}>
         {m.settings.updateButton}
       </Button>
       <button className="text-xs text-cream-100/70" onClick={() => setNeedRefresh(false)}>

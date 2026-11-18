@@ -24,8 +24,8 @@ export function HomePage() {
   return (
     <div className="flex flex-col gap-8">
       <section className="felt relative overflow-hidden rounded-3xl border border-gold-500/30 px-5 py-8 text-cream-50 shadow-[var(--shadow-lift)] sm:px-10 sm:py-12">
-        <div className="pointer-events-none absolute -top-10 -right-16 opacity-[0.13] sm:-right-6 sm:opacity-20" aria-hidden>
-          <Emblem size={300} />
+        <div className="pointer-events-none absolute top-1/2 right-12 hidden -translate-y-1/2 lg:block xl:right-20" aria-hidden>
+          <Emblem size={250} tilt={8} className="drop-shadow-[0_18px_30px_rgba(0,0,0,0.35)]" />
         </div>
         <div className="relative max-w-2xl">
           <p className="mb-3 text-xs font-bold tracking-[0.22em] text-gold-300 uppercase">{m.app.tagline}</p>

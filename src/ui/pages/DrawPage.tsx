@@ -33,7 +33,7 @@ function Shuffling() {
             className="absolute inset-0 animate-pulse"
             style={{ transform: `rotate(${(i - 1) * 14}deg) translateX(${(i - 1) * 10}px)`, animationDelay: `${i * 120}ms` }}
           >
-            <Emblem size={96} />
+            <Emblem size={96} tilt={0} />
           </div>
         ))}
       </div>
