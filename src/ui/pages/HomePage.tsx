@@ -24,10 +24,8 @@ export function HomePage() {
   return (
     <div className="flex flex-col gap-8">
       <section className="felt relative overflow-hidden rounded-3xl border border-gold-500/30 px-5 py-8 text-cream-50 shadow-[var(--shadow-lift)] sm:px-10 sm:py-12">
-        <div className="pointer-events-none absolute top-1/2 right-12 hidden -translate-y-1/2 lg:block xl:right-20" aria-hidden>
-          <Emblem size={250} tilt={8} className="drop-shadow-[0_18px_30px_rgba(0,0,0,0.35)]" />
-        </div>
-        <div className="relative max-w-2xl">
+        <div className="relative flex items-center justify-between gap-8">
+        <div className="max-w-2xl min-w-0">
           <p className="mb-3 text-xs font-bold tracking-[0.22em] text-gold-300 uppercase">{m.app.tagline}</p>
           <h1 className="text-[32px] leading-[1.08] font-semibold text-cream-50 sm:text-5xl">{m.home.heroTitle}</h1>
           <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-cream-100/85">{m.home.heroText}</p>
@@ -39,6 +37,15 @@ export function HomePage() {
               {m.home.import}
             </Button>
           </div>
+        </div>
+        <div className="pointer-events-none hidden shrink-0 pr-2 lg:block xl:pr-8" aria-hidden>
+          <span className="block xl:hidden">
+            <Emblem size={170} tilt={8} className="drop-shadow-[0_18px_30px_rgba(0,0,0,0.35)]" />
+          </span>
+          <span className="hidden xl:block">
+            <Emblem size={240} tilt={8} className="drop-shadow-[0_18px_30px_rgba(0,0,0,0.35)]" />
+          </span>
+        </div>
         </div>
       </section>
 
