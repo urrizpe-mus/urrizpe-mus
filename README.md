@@ -1,5 +1,7 @@
 # URRIZPE MUS
 
+**Abrir la aplicación: https://urrizpe-mus.github.io/urrizpe-mus/**
+
 Aplicación web para organizar **campeonatos de mus por parejas**: inscripción, sorteo imparcial, cuadro de eliminatorias, registro de ganadoras y clasificación. Funciona en ordenador, tablet y móvil, y se puede instalar como aplicación (PWA).
 
 > La aplicación **solo registra qué pareja gana cada partido**. No pide puntos, tantos, juegos ni marcadores: todo lo demás (avance, eliminación, cuadro y clasificación) se calcula solo.
@@ -42,7 +44,7 @@ npm run dev          # servidor de desarrollo en http://localhost:5173
 ## Documentación
 
 - [Arquitectura y funcionamiento](docs/ARQUITECTURA.md): módulos, motor de eliminatorias, sorteo, registro de ganadoras, datos, exportación y PWA.
-- [Publicación y actualización](docs/PUBLICACION.md): GitHub, Vercel, dominio y cómo publicar nuevas versiones.
+- [Publicación y actualización](docs/PUBLICACION.md): GitHub Pages y cómo publicar nuevas versiones.
 - [Pruebas](docs/PRUEBAS.md): qué se prueba y cómo.
 
 ## Datos y privacidad
@@ -51,4 +53,4 @@ Los campeonatos se guardan **en el navegador del dispositivo** (IndexedDB). No s
 
 ## Tecnologías
 
-React 19 · TypeScript · Vite · Tailwind CSS 4 · Lucide · jsPDF · vite-plugin-pwa (Workbox) · Vitest · Testing Library · Vercel.
+React 19 · TypeScript · Vite · Tailwind CSS 4 · Lucide · jsPDF · vite-plugin-pwa (Workbox) · Vitest · Testing Library · GitHub Pages.

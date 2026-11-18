@@ -101,7 +101,7 @@ Las parejas se ordenan por la ronda alcanzada. Las eliminadas en la misma ronda 
 ## Seguridad
 
 - Sin secretos ni claves en el código. Sin peticiones a servidores externos (fuentes incluidas en el propio paquete).
-- Cabeceras en Vercel: CSP estricta, HSTS, `X-Frame-Options`, `nosniff`, `Referrer-Policy`, `Permissions-Policy`.
+- Servida por HTTPS desde GitHub Pages. La página HTML exportada lleva una CSP que impide ejecutar código.
 - Los nombres se muestran siempre como texto (React y el HTML exportado escapan el contenido).
 - Operaciones destructivas con confirmación: borrar campeonatos, nuevo sorteo (escribir «SORTEO»), borrar todo (escribir «BORRAR»), sobrescribir al importar.
 

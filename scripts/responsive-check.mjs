@@ -9,7 +9,7 @@ import { spawn } from 'node:child_process';
 import { mkdirSync } from 'node:fs';
 
 const CHROME = process.env.CHROME_PATH || '/usr/bin/google-chrome';
-const BASE = process.env.BASE_URL || 'http://localhost:4173';
+const BASE = process.env.BASE_URL || 'http://localhost:4173/urrizpe-mus';
 const PAIRS = Number(process.env.PAIRS || 23);
 const OUT = 'screenshots';
 mkdirSync(OUT, { recursive: true });

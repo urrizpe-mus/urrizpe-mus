@@ -60,7 +60,7 @@ export function AppRoutes() {
 export default function App({ repo }: { repo?: ChampionshipRepository }) {
   return (
     <AppProvider repo={repo}>
-      <BrowserRouter>
+      <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
         <AppRoutes />
       </BrowserRouter>
       <PwaUpdater />
