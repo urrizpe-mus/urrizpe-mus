@@ -1,16 +1,18 @@
+import { useId, useMemo } from 'react';
 import { emblemSvg } from './emblem';
 import { cn } from '../components/ui';
 
-const EMBLEM = emblemSvg();
-
 export function Emblem({ size = 40, className }: { size?: number; className?: string }) {
+  // Cada copia necesita ids propios: si dos SVG comparten ids y uno está oculto, el otro pierde los degradados.
+  const uid = useId();
+  const svg = useMemo(() => emblemSvg({ prefix: `um${uid}` }), [uid]);
   return (
     <span
       aria-hidden
       className={cn('inline-block shrink-0 drop-shadow-sm [&>svg]:h-full [&>svg]:w-full', className)}
       style={{ width: size, height: size }}
       // SVG propio y constante, generado en emblem.ts (no contiene datos del usuario).
-      dangerouslySetInnerHTML={{ __html: EMBLEM }}
+      dangerouslySetInnerHTML={{ __html: svg }}
     />
   );
 }
