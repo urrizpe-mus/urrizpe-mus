@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Check, Crown, Hourglass, ZoomIn, ZoomOut } from 'lucide-react';
+import { Check, ChevronLeft, ChevronRight, Crown, Hourglass, ZoomIn, ZoomOut } from 'lucide-react';
 import { championOf, matchPairs, matchState } from '../../domain/bracket';
 import type { Bracket as BracketData, Championship, Match, Pair } from '../../domain/types';
 import { roundName, roundShort, useT } from '../../i18n';
@@ -156,7 +156,7 @@ export function bracketLayout(bracket: BracketData) {
 }
 
 /** Cuadro completo con líneas de conexión entre rondas. */
-export function BracketTree({ ch, onOpen, scale = 1 }: { ch: Championship; onOpen?: (m: Match) => void; scale?: number }) {
+export function BracketTree({ ch, onOpen, scale = 1, highlight }: { ch: Championship; onOpen?: (m: Match) => void; scale?: number; highlight?: string | null }) {
   const m = useT();
   const pairs = usePairIndex(ch);
   const bracket = ch.bracket!;
@@ -187,16 +187,21 @@ export function BracketTree({ ch, onOpen, scale = 1 }: { ch: Championship; onOpe
   }
 
   return (
-    <div style={{ width: width * scale, height: (height + 56) * scale }} className="relative">
-      <div style={{ width, height: height + 56, transform: `scale(${scale})`, transformOrigin: '0 0' }} className="absolute top-0 left-0">
-        {/* Cabeceras de ronda */}
-        {[...rounds, null].map((r, i) => (
-          <div key={i} className="absolute top-0 text-center" style={{ left: colX(i), width: CARD_W }}>
-            <p className="font-display text-[15px] font-semibold text-bottle-900">{r ? roundName(m, r, rounds) : m.bracketPage.champion}</p>
-            {r && <p className="text-[11px] font-semibold text-ink-500">{m.plan.matches(r.matches)}{r.byes ? ` · ${m.plan.byes(r.byes)}` : ''}</p>}
-          </div>
-        ))}
-        <div className="absolute left-0" style={{ top: 56, width, height }}>
+    <div style={{ width: width * scale }} className="relative">
+      {/* Cabeceras de ronda: fijas arriba mientras se recorre el cuadro */}
+      <div className="sticky top-0 z-10 bg-cream-100/95 backdrop-blur-sm" style={{ height: 52 * scale }}>
+        <div style={{ width, height: 52, transform: `scale(${scale})`, transformOrigin: '0 0' }} className="absolute top-0 left-0">
+          {[...rounds, null].map((r, i) => (
+            <div key={i} data-round-col={i} className="absolute top-1.5 text-center" style={{ left: colX(i), width: CARD_W }}>
+              <p className="font-display text-[15px] font-semibold text-bottle-900">{r ? roundName(m, r, rounds) : m.bracketPage.champion}</p>
+              {r && <p className="text-[11px] font-semibold text-ink-500">{m.plan.matches(r.matches)}{r.byes ? ` · ${m.plan.byes(r.byes)}` : ''}</p>}
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="relative" style={{ height: (height + 8) * scale }}>
+      <div style={{ width, height, transform: `scale(${scale})`, transformOrigin: '0 0' }} className="absolute top-2 left-0">
+        <div className="absolute top-0 left-0" style={{ width, height }}>
           <svg className="pointer-events-none absolute inset-0" width={width} height={height} aria-hidden>
             {lines
               .filter((l) => !l.on)
@@ -210,7 +215,12 @@ export function BracketTree({ ch, onOpen, scale = 1 }: { ch: Championship; onOpe
               ))}
           </svg>
           {items.map((it) => (
-            <div key={it.key} className="absolute" style={{ left: it.x, top: it.y - (it.match ? CARD_H / 2 : 26), width: CARD_W }}>
+            <div
+              key={it.key}
+              data-match-id={it.match?.id}
+              className={cn('absolute rounded-xl transition-shadow duration-500', it.match && highlight === it.match.id && 'ring-4 ring-gold-400')}
+              style={{ left: it.x, top: it.y - (it.match ? CARD_H / 2 : 26), width: CARD_W }}
+            >
               {it.match ? (
                 <BracketMatchCard ch={ch} match={it.match} onOpen={onOpen} className="h-[112px]" />
               ) : (
@@ -218,10 +228,11 @@ export function BracketTree({ ch, onOpen, scale = 1 }: { ch: Championship; onOpe
               )}
             </div>
           ))}
-          <div className="absolute" style={{ left: colX(rounds.length), top: height / 2 - 60, width: CARD_W }}>
+          <div data-champion className="absolute" style={{ left: colX(rounds.length), top: height / 2 - 60, width: CARD_W }}>
             <ChampionCard ch={ch} />
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
@@ -231,7 +242,7 @@ export function BracketTree({ ch, onOpen, scale = 1 }: { ch: Championship; onOpe
 /* Vista por rondas (móvil): columnas deslizables con scroll-snap            */
 /* ------------------------------------------------------------------------- */
 
-export function BracketRounds({ ch, onOpen }: { ch: Championship; onOpen?: (m: Match) => void }) {
+export function BracketRounds({ ch, onOpen, highlight }: { ch: Championship; onOpen?: (m: Match) => void; highlight?: string | null }) {
   const m = useT();
   const pairs = usePairIndex(ch);
   const bracket = ch.bracket!;
@@ -256,6 +267,14 @@ export function BracketRounds({ ch, onOpen }: { ch: Championship; onOpen?: (m: M
     setActive(i);
   };
 
+  // Permite a la pantalla pedir que se muestre una ronda concreta (p. ej. «siguiente partido»).
+  useEffect(() => {
+    if (!highlight) return;
+    const mt = bracket.matches.find((x) => x.id === highlight);
+    if (mt) goTo(mt.round);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [highlight]);
+
   const onScroll = () => {
     const el = scroller.current;
     if (!el) return;
@@ -266,7 +285,11 @@ export function BracketRounds({ ch, onOpen }: { ch: Championship; onOpen?: (m: M
 
   return (
     <div>
-      <div className="no-print -mx-4 mb-3 flex gap-2 overflow-x-auto px-4 pb-1 scrollbar-thin sm:mx-0 sm:px-0" role="tablist">
+      <div className="no-print sticky top-14 z-10 -mx-4 mb-3 flex items-center gap-1.5 bg-cream-100/95 px-4 py-2 backdrop-blur-sm sm:mx-0 sm:px-0 lg:top-0">
+        <button type="button" aria-label="Ronda anterior" disabled={active === 0} onClick={() => goTo(active - 1)} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-cream-50 text-bottle-900 ring-1 ring-bottle-900/12 disabled:opacity-35">
+          <ChevronLeft size={20} />
+        </button>
+      <div className="flex flex-1 gap-2 overflow-x-auto scrollbar-thin" role="tablist">
         {[...rounds, null].map((r, i) => (
           <button
             key={i}
@@ -281,6 +304,10 @@ export function BracketRounds({ ch, onOpen }: { ch: Championship; onOpen?: (m: M
             {r ? roundShort(m, r, rounds) : <Crown size={16} className="inline" />}
           </button>
         ))}
+      </div>
+        <button type="button" aria-label="Ronda siguiente" disabled={active === rounds.length} onClick={() => goTo(active + 1)} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-cream-50 text-bottle-900 ring-1 ring-bottle-900/12 disabled:opacity-35">
+          <ChevronRight size={20} />
+        </button>
       </div>
       <div ref={scroller} onScroll={onScroll} className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-3 scrollbar-thin sm:mx-0 sm:px-0">
         {rounds.map((r, i) => {
@@ -300,7 +327,13 @@ export function BracketRounds({ ch, onOpen }: { ch: Championship; onOpen?: (m: M
               </header>
               <div className="flex flex-col gap-2">
                 {units.map((u) =>
-                  u.match ? <BracketMatchCard key={u.match.id} ch={ch} match={u.match} onOpen={onOpen} /> : <ByeCard key={u.bye} pair={pairs.get(u.bye!)!} />,
+                  u.match ? (
+                    <div key={u.match.id} data-match-id={u.match.id} className={cn('scroll-mt-32 rounded-xl transition-shadow duration-500', highlight === u.match.id && 'ring-4 ring-gold-400')}>
+                      <BracketMatchCard ch={ch} match={u.match} onOpen={onOpen} />
+                    </div>
+                  ) : (
+                    <ByeCard key={u.bye} pair={pairs.get(u.bye!)!} />
+                  ),
                 )}
               </div>
             </section>

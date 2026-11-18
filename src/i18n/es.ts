@@ -263,6 +263,9 @@ export const es = {
     champion: 'Campeona',
     byeCard: 'Pase directo',
     swipeHint: 'Desliza para ver más rondas',
+    nextMatch: (n: number) => `Siguiente partido: ${n}`,
+    fit: 'Ver entero',
+    dragHint: 'Arrastra con el ratón para moverte por el cuadro, o usa los botones de ronda.',
   },
   matchesPage: {
     title: 'Partidos',
