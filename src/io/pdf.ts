@@ -5,7 +5,7 @@ import { pairProgressMap, standings } from '../domain/standings';
 import type { Championship, Match, Pair } from '../domain/types';
 import { formatDate, roundEliminated, roundName } from '../i18n';
 import type { Messages } from '../i18n/es';
-import { emblemSvg } from '../ui/brand/emblem';
+import fanUrl from '../ui/brand/generated/fan.webp';
 
 /**
  * Documentos PDF con la identidad de URRIZPE MUS. Se generan en el
@@ -38,7 +38,7 @@ function latin1(text: string): string {
 async function emblemPng(): Promise<string | null> {
   try {
     if (typeof document === 'undefined' || typeof Image === 'undefined') return null;
-    const url = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(emblemSvg())}`;
+    const url = fanUrl;
     const img = new Image();
     await new Promise<void>((resolve, reject) => {
       img.onload = () => resolve();
@@ -46,10 +46,11 @@ async function emblemPng(): Promise<string | null> {
       img.src = url;
     });
     const canvas = document.createElement('canvas');
-    canvas.width = canvas.height = 256;
+    canvas.width = 676;
+    canvas.height = 330;
     const ctx = canvas.getContext('2d');
     if (!ctx) return null;
-    ctx.drawImage(img, 0, 0, 256, 256);
+    ctx.drawImage(img, 0, 0, 676, 330);
     return canvas.toDataURL('image/png');
   } catch {
     return null;
@@ -76,15 +77,15 @@ function header(d: Doc, ch: Championship, title: string): number {
   pdf.rect(0, 0, w, 24, 'F');
   pdf.setFillColor(...C.gold);
   pdf.rect(0, 24, w, 0.8, 'F');
-  if (d.logo) pdf.addImage(d.logo, 'PNG', 10, 4, 16, 16, 'emblem');
+  if (d.logo) pdf.addImage(d.logo, 'PNG', 8, 3.5, 35, 17, 'emblem');
   pdf.setTextColor(...C.cream);
   pdf.setFont('times', 'bold');
   pdf.setFontSize(15);
-  pdf.text('URRIZPE', d.logo ? 30 : 10, 12.5, { charSpace: 0.9 });
+  pdf.text('URRIZPE', d.logo ? 46 : 10, 12.5, { charSpace: 0.9 });
   pdf.setFont('helvetica', 'bold');
   pdf.setFontSize(8);
   pdf.setTextColor(...C.gold);
-  pdf.text('MUS', d.logo ? 30 : 10, 18, { charSpace: 2.4 });
+  pdf.text('MUS', d.logo ? 46 : 10, 18, { charSpace: 2.4 });
   pdf.setTextColor(...C.cream);
   pdf.setFont('helvetica', 'bold');
   pdf.setFontSize(12);

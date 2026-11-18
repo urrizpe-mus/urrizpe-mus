@@ -123,7 +123,7 @@ export function Shell({ children, championship }: { children: ReactNode; champio
               <Link to="/campeonatos" aria-label={m.nav.back} className="-ml-1 rounded-full p-1.5 text-cream-50 hover:bg-white/10">
                 <ArrowLeft size={22} />
               </Link>
-              <Emblem size={38} />
+              <Emblem size={30} />
               <p className="min-w-0 flex-1 truncate font-display text-[17px] font-semibold text-cream-50">{championship.name}</p>
             </>
           ) : (

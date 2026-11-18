@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "icons": "tsx scripts/generate-icons.ts",
+    "icons": "node scripts/brand/build-brand.mjs",
     "check:responsive": "node scripts/responsive-check.mjs"
   },
   "dependencies": {

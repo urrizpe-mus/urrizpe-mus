@@ -42,7 +42,7 @@ export default defineConfig({
       },
       workbox: {
         // Solo se guarda la aplicación. Los datos van en IndexedDB y no pasan por la caché.
-        globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
+        globPatterns: ['**/*.{js,css,html,svg,png,webp,woff2}'],
         globIgnores: ['**/*-{vietnamese,greek,cyrillic,cyrillic-ext}-*.woff2'],
         navigateFallback: `${BASE}index.html`,
         cleanupOutdatedCaches: true,

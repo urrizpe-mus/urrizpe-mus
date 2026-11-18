@@ -4,7 +4,7 @@ import { standings } from '../domain/standings';
 import type { Championship, Pair } from '../domain/types';
 import { formatDate, roundEliminated, roundName } from '../i18n';
 import type { Messages } from '../i18n/es';
-import { emblemSvg } from '../ui/brand/emblem';
+import fanSmall from '../ui/brand/generated/fan-small.webp?inline';
 
 /** Escapa texto para HTML: los nombres nunca se interpretan como código. */
 export function esc(value: string): string {
@@ -58,7 +58,7 @@ export function readOnlyHtml(ch: Championship, m: Messages): string {
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f8f3e6;color:#25282a}
 header{background:#12432f;color:#f8f3e6;padding:18px 20px;border-bottom:3px solid #c9a227;display:flex;gap:14px;align-items:center}
-header svg{width:52px;height:52px;flex:none}header h1{margin:0;font-family:Georgia,serif;font-size:22px}header p{margin:4px 0 0;color:#e3c766;font-size:13px}
+header img{width:112px;height:55px;flex:none}header h1{margin:0;font-family:Georgia,serif;font-size:22px}header p{margin:4px 0 0;color:#e3c766;font-size:13px}
 main{max-width:1100px;margin:0 auto;padding:16px}h2{font-family:Georgia,serif;color:#0d3324;border-bottom:1px solid #c9a22766;padding-bottom:6px;margin-top:28px}
 h3{font-size:15px;color:#12432f;display:flex;justify-content:space-between;margin:14px 0 8px}h3 em{color:#7f6414;font-style:normal}
 .note{background:#fff;border:1px solid #0001;border-radius:12px;padding:10px 12px;font-size:13px;color:#4d5154}
@@ -71,7 +71,7 @@ h3{font-size:15px;color:#12432f;display:flex;justify-content:space-between;margi
 .champ{background:#12432f;color:#f8f3e6;border:2px solid #c9a227;border-radius:16px;padding:16px;text-align:center;margin-top:16px}.champ p{margin:0 0 8px;color:#e3c766;letter-spacing:.2em;font-weight:800;font-size:12px;text-transform:uppercase}.champ .p{justify-content:center}.champ .p strong{font-size:20px}.champ .p small{color:#e2d5b6}
 footer{text-align:center;color:#8a8d8f;font-size:12px;padding:24px}
 </style></head><body>
-<header>${emblemSvg()}<div><h1>${esc(ch.name)}</h1><p>${esc(formatDate(ch.date))} · URRIZPE MUS</p></div></header>
+<header><img src="${fanSmall}" alt="" width="112" height="55"><div><h1>${esc(ch.name)}</h1><p>${esc(formatDate(ch.date))} · URRIZPE MUS</p></div></header>
 <main><p class="note">${esc(m.publicView.readonly)} ${esc(formatDate(new Date().toISOString(), true))}.</p>${ch.description ? `<p>${esc(ch.description)}</p>` : ''}${body}</main>
 <footer>URRIZPE MUS</footer></body></html>`;
 }

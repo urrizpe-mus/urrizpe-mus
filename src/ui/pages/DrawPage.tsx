@@ -26,17 +26,7 @@ function Shuffling() {
   const m = useT();
   return (
     <div className="flex flex-col items-center gap-4 py-14" role="status">
-      <div className="relative h-24 w-24">
-        {[0, 1, 2].map((i) => (
-          <div
-            key={i}
-            className="absolute inset-0 animate-pulse"
-            style={{ transform: `rotate(${(i - 1) * 14}deg) translateX(${(i - 1) * 10}px)`, animationDelay: `${i * 120}ms` }}
-          >
-            <Emblem size={96} tilt={0} />
-          </div>
-        ))}
-      </div>
+      <Emblem size={110} className="animate-pulse" />
       <p className="font-display text-xl text-bottle-900">{m.drawPage.shuffling}</p>
     </div>
   );
