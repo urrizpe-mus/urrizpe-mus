@@ -149,6 +149,8 @@ export function Modal({
     const overflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     requestAnimationFrame(() => {
+      // Si el usuario ya está escribiendo dentro del diálogo, no le movemos el foco.
+      if (panel.current?.contains(document.activeElement)) return;
       const first = panel.current?.querySelector<HTMLElement>('[data-autofocus], input, textarea, select');
       (first ?? panel.current)?.focus();
     });
